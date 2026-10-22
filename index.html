@@ -1,57 +1,801 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Altit | Precision Operational Tools</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #090d16;
-            color: #f3f4f6;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            padding: 40px 20px;
-        }
-        h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            margin-bottom: 12px;
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        p {
-            font-size: 1.2rem;
-            color: #9ca3af;
-            line-height: 1.6;
-        }
-        .badge {
-            background-color: #1e1b4b;
-            color: #a78bfa;
-            padding: 6px 16px;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 24px;
-            border: 1px solid #4c1d95;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Altit builds focused software tools that remove friction from professional workflows.">
+<title>Altit — Precision Operational Tools</title>
+<style>
+:root {
+  --site-primary: #000000;
+  --site-secondary: #f2f2f0;
+  --site-background: #ffffff;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #111111;
+  --site-on-background: #111111;
+  --site-font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --site-font-heading: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 118px; }
+body { margin: 0; padding-top: 76px; background: light-dark(#ffffff,#111111); color: light-dark(#111111,#f6f6f4); font-family: var(--site-font-body); line-height: 1.55; }
+button, input, textarea { font: inherit; }
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+#site-root { background-color: light-dark(var(--site-background), #111111); color: light-dark(var(--site-on-background), #f4f4f2); min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; }
+.container { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+.mono, .eyebrow, .nav-links, .status, .meta, .issue-id, .footer-meta { font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; }
+.eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.topline { border-bottom: 1px solid #dededb; background: light-dark(#fff,#111); }
+.topline-inner { display:flex; align-items:center; justify-content:space-between; min-height:32px; gap:16px; color:light-dark(#555,#aaa); font-size:10px; letter-spacing:.07em; text-transform:uppercase; }
+.site-header { border-bottom: 1px solid light-dark(#dededb,#333); position:fixed; top:0; left:0; right:0; z-index:100; background:light-dark(#fff,#111); }
+.nav { display:flex; align-items:center; justify-content:space-between; min-height:76px; gap:24px; }
+.wordmark { font-size:25px; line-height:1; font-weight:600; letter-spacing:.19em; }
+.nav-links { display:flex; gap:clamp(16px,3vw,34px); align-items:center; font-size:11px; text-transform:uppercase; letter-spacing:.015em; }
+.nav-links a:hover { text-decoration:underline; text-underline-offset:5px; }
+.button { border:1px solid currentColor; padding:12px 17px; display:inline-flex; gap:12px; align-items:center; justify-content:center; font-size:12px; font-weight:500; cursor:pointer; background:transparent; color:inherit; transition:background .15s,color .15s; }
+.button:hover { background:light-dark(#111,#f4f4f2); color:light-dark(#fff,#111); }
+.button-dark { background:light-dark(#111,#f4f4f2); color:light-dark(#fff,#111); border-color:light-dark(#111,#f4f4f2); }
+.button-dark:hover { background:transparent; color:inherit; }
+.theme-toggle { width:44px; height:44px; min-width:44px; padding:0; display:inline-grid; place-items:center; font-family:"IBM Plex Mono",monospace; font-size:10px; text-transform:uppercase; letter-spacing:.03em; position:relative; overflow:hidden; }
+.theme-toggle .theme-icon { font-size:20px; line-height:1; transition:transform .25s ease; }
+.theme-toggle:hover .theme-icon { transform:rotate(18deg) scale(1.08); }
+.theme-toggle .theme-label { display:none; }
+.theme-toggle::after { content:""; position:absolute; inset:3px; border:1px solid currentColor; opacity:.12; pointer-events:none; }
+:root[data-theme="extreme"] { color-scheme:dark; --site-background:#000; --site-on-background:#fff; }
+:root[data-theme="extreme"] body, :root[data-theme="extreme"] #site-root { background:#000!important; color:#fff!important; }
+:root[data-theme="extreme"] .site-header, :root[data-theme="extreme"] .topline, :root[data-theme="extreme"] .modal, :root[data-theme="extreme"] .products-section, :root[data-theme="extreme"] .manifesto { background:#000!important; color:#fff!important; }
+:root[data-theme="extreme"] .product-art, :root[data-theme="extreme"] .art-page, :root[data-theme="extreme"] .modal input, :root[data-theme="extreme"] .modal textarea { background:#050505!important; color:#fff!important; }
+:root[data-theme="extreme"] .hero-grid, :root[data-theme="extreme"] .manifesto:before { opacity:.12!important; }
+:root[data-theme="extreme"] * { border-color:#292929!important; }
+.nav-actions { display:flex; align-items:center; gap:10px; }
+
+.contact-form { max-width:760px; }
+.contact-fields { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.contact-form .field { margin:0 0 20px; }
+.contact-form .field span { font-size:11px; }
+.contact-form .field input, .contact-form .field textarea { font-size:15px; border-color:light-dark(#cfcfca,#4a4a4a); background:light-dark(#fff,#111); }
+.contact-form .field input::placeholder, .contact-form .field textarea::placeholder { color:light-dark(#888,#888); }
+.contact-form .field textarea { min-height:150px; }
+.contact-submit { display:flex; align-items:center; flex-wrap:wrap; gap:18px; }
+.contact-submit .note-small { margin:0; }
+
+@media (max-width:760px) { .nav-actions { gap:7px; } .theme-toggle { width:40px; height:40px; min-width:40px; } }
+.hero { position:relative; padding:clamp(76px,11vw,142px) 0 82px; border-bottom:1px solid light-dark(#dededb,#333); isolation:isolate; }
+.hero-grid { position:absolute; inset:0 0 0 50%; opacity:calc(.55 * var(--site-decoration-opacity)); pointer-events:none; z-index:-1; background-image:linear-gradient(to right, transparent 49.7%, light-dark(#e7e7e4,#292929) 50%, transparent 50.3%), radial-gradient(light-dark(#bcbcb8,#555) .8px, transparent .8px); background-size:100% 100%, 18px 18px; mask-image:linear-gradient(90deg, transparent, #000 24%); }
+.hero-content { max-width:780px; }
+.hero .eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+.eyebrow-mark { width:7px; height:7px; background:currentColor; display:inline-block; }
+h1,h2,h3,p { margin-top:0; }
+h1 { font-family:var(--site-font-heading); font-size:clamp(44px,7.5vw,92px); line-height:.99; letter-spacing:-.065em; font-weight:500; max-width:850px; margin-bottom:28px; }
+h1 span { display:block; }
+.hero-copy { max-width:540px; font-size:clamp(16px,1.7vw,19px); color:light-dark(#555,#b5b5b2); margin-bottom:32px; }
+.hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+.hero-note { margin-top:52px; padding-top:16px; border-top:1px solid light-dark(#dededb,#333); display:flex; align-items:center; justify-content:space-between; gap:16px; color:light-dark(#555,#aaa); font-size:11px; }
+.hero-note span:last-child { text-align:right; }
+.section { padding:clamp(64px,8vw,104px) 0; border-bottom:1px solid light-dark(#dededb,#333); }
+.section-head { display:grid; grid-template-columns: minmax(180px,.8fr) minmax(260px,1.2fr); gap:36px; margin-bottom:38px; align-items:start; }
+.section-index { display:flex; gap:12px; align-items:center; color:light-dark(#666,#aaa); }
+.section-index b { font-weight:400; color:inherit; }
+h2 { font-size:clamp(30px,4.3vw,52px); line-height:1.06; letter-spacing:-.05em; font-weight:500; margin-bottom:14px; }
+.section-intro { max-width:570px; color:light-dark(#555,#b5b5b2); margin-bottom:0; font-size:15px; }
+.issues { border-top:1px solid light-dark(#111,#555); }
+.issue { display:grid; grid-template-columns:72px minmax(0,1fr) 160px 90px; align-items:center; gap:20px; padding:22px 0; border-bottom:1px solid light-dark(#dededb,#333); }
+.vote { width:52px; border:1px solid light-dark(#d5d5d1,#444); background:transparent; color:inherit; padding:8px 4px; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; }
+.vote[aria-pressed="true"] { background:light-dark(#111,#eee); color:light-dark(#fff,#111); }
+.vote strong { font-size:15px; font-weight:500; }
+.vote span { font-size:12px; }
+.issue h3 { margin-bottom:5px; font-size:17px; font-weight:500; letter-spacing:-.02em; }
+.issue p { margin:0; font-size:13px; color:light-dark(#666,#aaa); max-width:650px; }
+.issue-id { color:light-dark(#777,#999); font-size:10px; }
+.status { justify-self:start; border:1px solid light-dark(#d2d2ce,#444); padding:6px 8px; font-size:10px; white-space:nowrap; }
+.status:before { content:""; width:5px; height:5px; display:inline-block; background:currentColor; border-radius:50%; margin:0 7px 1px 0; }
+.issue-more { font-size:11px; text-decoration:underline; text-underline-offset:4px; justify-self:end; }
+.note-small { font-size:11px; color:light-dark(#777,#999); margin-top:16px; }
+.lab-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid light-dark(#d8d8d5,#393939); }
+.lab-card { min-height:260px; padding:24px; display:flex; flex-direction:column; border-right:1px solid light-dark(#d8d8d5,#393939); position:relative; overflow:hidden; }
+.lab-card:last-child { border-right:0; }
+.lab-card:after { content:""; position:absolute; right:0; bottom:0; width:100px; height:100px; opacity:calc(.6 * var(--site-decoration-opacity)); background-image:radial-gradient(light-dark(#c5c5c1,#4a4a4a) 1px,transparent 1px); background-size:10px 10px; mask-image:linear-gradient(135deg,transparent,#000); pointer-events:none; }
+.lab-top { display:flex; justify-content:space-between; gap:10px; font-size:10px; color:light-dark(#666,#aaa); }
+.lab-card h3 { margin:40px 0 10px; font-size:23px; line-height:1.12; letter-spacing:-.04em; font-weight:500; }
+.lab-card p { font-size:13px; color:light-dark(#666,#aaa); margin-bottom:24px; }
+.lab-foot { margin-top:auto; display:flex; justify-content:space-between; align-items:center; font-size:11px; position:relative; z-index:1; }
+.dashed { border-style:dashed; }
+
+.products-section { background:light-dark(#fafaf8,#141414); }
+.product-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid light-dark(#d8d8d5,#393939); }
+.product-card { min-width:0; display:flex; flex-direction:column; padding:18px; border-right:1px solid light-dark(#d8d8d5,#393939); }
+.product-card:last-child { border-right:0; }
+.product-art { height:190px; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom:22px; background:light-dark(#f0f0ed,#202020); border:1px solid light-dark(#e1e1dd,#333); }
+.product-art-doc { background-image:linear-gradient(to right,transparent 49.8%,light-dark(#deded9,#333) 50%,transparent 50.2%),radial-gradient(light-dark(#c7c7c1,#444) .7px,transparent .7px); background-size:100% 100%,14px 14px; }
+.art-page { width:88px; height:112px; border:1px solid light-dark(#888,#777); background:light-dark(#fff,#101010); padding:16px 12px; position:relative; z-index:1; box-shadow:8px 8px 0 light-dark(#deded9,#333); }
+.art-page i { display:block; height:3px; margin-bottom:8px; background:light-dark(#b9b9b3,#555); }
+.art-page i:nth-child(2) { width:75%; }.art-page i:nth-child(3) { width:88%; }
+.art-page b { font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500; display:block; margin-top:13px; }
+.art-arrow { position:absolute; right:calc(50% - 76px); top:calc(50% - 45px); font-size:24px; background:light-dark(#111,#f4f4f2); color:light-dark(#fff,#111); width:36px; height:36px; display:grid; place-items:center; z-index:2; }
+.product-art-code { flex-direction:column; align-items:flex-start; padding-left:22%; gap:13px; }
+.product-art-code:before { content:""; position:absolute; inset:0; opacity:calc(.65 * var(--site-decoration-opacity)); background-image:linear-gradient(light-dark(#deded9,#333) 1px,transparent 1px),linear-gradient(90deg,light-dark(#deded9,#333) 1px,transparent 1px); background-size:24px 24px; }
+.code-line { height:5px; width:125px; background:light-dark(#111,#eee); position:relative; z-index:1; }
+.code-line.medium { width:88px; opacity:.62; }.code-line.short { width:105px; opacity:.35; }
+.code-bracket { position:absolute; right:18%; bottom:20%; font-size:46px; letter-spacing:-.1em; font-weight:300; color:light-dark(#777,#aaa); }
+.product-art-time { flex-direction:column; gap:12px; }
+.clock-face { width:94px; height:94px; border:2px solid currentColor; border-radius:50%; display:grid; place-items:center; position:relative; }
+.clock-face:before { content:""; position:absolute; width:2px; height:27px; top:17px; left:44px; background:currentColor; transform:rotate(30deg); transform-origin:bottom; }
+.clock-face span { position:absolute; height:2px; width:22px; background:currentColor; top:45px; left:45px; transform:rotate(18deg); transform-origin:left; }
+.clock-face b { position:absolute; right:-6px; top:0; font-size:18px; font-weight:500; width:28px; height:28px; display:grid; place-items:center; background:light-dark(#111,#f4f4f2); color:light-dark(#fff,#111); }
+.time-line { width:118px; height:3px; background:light-dark(#bbb,#555); }.time-line.short { width:78px; }
+.product-meta { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:9px; color:light-dark(#666,#aaa); }
+.product-status { border:1px solid light-dark(#ccc,#444); padding:5px 6px; font-size:9px; white-space:nowrap; }
+.product-card h3 { font-size:27px; line-height:1.1; letter-spacing:-.045em; font-weight:500; margin:24px 0 6px; }
+.product-subtitle { font-size:12px; font-weight:500; margin-bottom:12px!important; color:light-dark(#333,#ddd)!important; }
+.product-card > p:not(.product-subtitle) { font-size:13px; color:light-dark(#666,#aaa); min-height:80px; }
+.product-bottom { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid light-dark(#dededb,#333); padding-top:14px; margin-top:auto; font-size:9px; }
+.product-bottom .mono { color:light-dark(#666,#aaa); }
+.text-action { padding:0; border:0; background:transparent; color:inherit; text-decoration:underline; text-underline-offset:4px; cursor:pointer; font-size:11px; white-space:nowrap; }
+.products-foot { display:flex; align-items:center; justify-content:space-between; gap:18px; padding-top:20px; color:light-dark(#666,#aaa); font-size:10px; }
+
+.log-list { border-top:1px solid light-dark(#111,#555); }
+.log-row { display:grid; grid-template-columns:150px 100px minmax(0,1fr); gap:20px; padding:18px 0; border-bottom:1px solid light-dark(#dededb,#333); font-size:13px; }
+.log-row time { color:light-dark(#666,#aaa); font-family:"IBM Plex Mono",monospace; font-size:11px; }
+.log-tag { font-family:"IBM Plex Mono",monospace; font-size:10px; text-transform:uppercase; }
+.log-row p { margin:0; }
+.manifesto { background:light-dark(#f2f2f0,#191919); position:relative; overflow:hidden; }
+.manifesto:before { content:""; position:absolute; inset:0; pointer-events:none; opacity:calc(.42 * var(--site-decoration-opacity)); background-image:linear-gradient(light-dark(#d8d8d4,#333) 1px,transparent 1px),linear-gradient(90deg,light-dark(#d8d8d4,#333) 1px,transparent 1px); background-size:36px 36px; mask-image:linear-gradient(90deg,#000,transparent 85%); }
+.manifesto .container { position:relative; }
+.manifesto-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:end; }
+.manifesto h2 { font-size:clamp(36px,5.5vw,68px); max-width:700px; }
+.manifesto-copy { max-width:430px; color:light-dark(#555,#aaa); font-size:14px; }
+.manifesto-copy .mono { font-size:11px; margin-top:26px; display:block; }
+.footer { padding:28px 0; }
+.footer-main { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.footer-brand { display:flex; align-items:center; gap:18px; }
+.footer-brand .wordmark { font-size:18px; }
+.footer-brand span:last-child { border-left:1px solid light-dark(#ccc,#444); padding-left:18px; font-size:10px; letter-spacing:.06em; text-transform:uppercase; }
+.footer-links { display:flex; flex-wrap:wrap; gap:18px; font-size:11px; color:light-dark(#555,#aaa); }
+.footer-meta { border-top:1px solid light-dark(#dededb,#333); margin-top:25px; padding-top:14px; display:flex; justify-content:space-between; gap:20px; font-size:10px; color:light-dark(#777,#999); }
+.modal-backdrop { display:none; position:fixed; inset:0; z-index:10; background:rgba(0,0,0,.55); padding:20px; align-items:center; justify-content:center; }
+.modal-backdrop.open { display:flex; }
+#contact-modal { z-index:12; }
+.contact-nav { white-space:nowrap; }
+.mobile-contact-link { border:0; border-bottom:1px solid light-dark(#dededb,#333); background:transparent; color:inherit; text-align:left; width:100%; padding:11px 0; font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; cursor:pointer; }
+.modal { background:light-dark(#fff,#171717); color:light-dark(#111,#f5f5f2); width:min(520px,100%); padding:28px; border:1px solid light-dark(#111,#555); box-shadow:0 20px 80px rgba(0,0,0,.2); }
+.modal-head { display:flex; align-items:start; justify-content:space-between; gap:20px; }
+.modal h2 { font-size:30px; }
+.close { background:transparent; border:1px solid currentColor; width:34px; height:34px; cursor:pointer; }
+.field { display:block; margin:18px 0; }
+.field span { display:block; font-family:"IBM Plex Mono",monospace; font-size:10px; text-transform:uppercase; margin-bottom:8px; }
+.field input,.field textarea { width:100%; border:1px solid light-dark(#ccc,#444); padding:12px; color:inherit; background:transparent; border-radius:0; }
+.field textarea { min-height:110px; resize:vertical; }
+.form-message { font-size:12px; margin-top:12px; }
+.mobile-menu { display:none; }
+.mobile-nav-panel { display:none; border-top:1px solid light-dark(#dededb,#333); padding:12px 0 18px; }
+.mobile-nav-panel a { display:block; padding:11px 0; font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; }
+.mobile-nav-panel.open { display:block; }
+.submission-tools { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:14px; }
+.submission-tools button { font-size:11px; }
+#saved-submissions { margin-top:16px; }
+.saved-submission { border:1px solid light-dark(#d8d8d5,#393939); padding:14px; margin-top:10px; }
+.saved-submission h3 { margin:0 0 6px; font-size:14px; }
+.saved-submission p { margin:0 0 6px; font-size:12px; color:light-dark(#555,#aaa); white-space:pre-wrap; }
+.saved-submission small { font-family:"IBM Plex Mono",monospace; font-size:10px; color:light-dark(#777,#999); }
+
+@media (max-width:760px) {
+ .container { width:min(100% - 32px,1160px); }
+ .topline-inner { font-size:9px; }
+ .nav { min-height:66px; } body { padding-top:66px; } html { scroll-padding-top:90px; }
+ .nav-links { display:none; }
+ .mobile-menu { display:inline-flex; }
+ .nav-cta { padding:10px 11px; font-size:11px; }
+ .hero { padding:78px 0 48px; }
+ .hero-grid { left:22%; opacity:calc(.35 * var(--site-decoration-opacity)); }
+ .hero-note { align-items:flex-start; flex-direction:column; }
+ .hero-note span:last-child { text-align:left; }
+ .section-head { grid-template-columns:1fr; gap:16px; }
+ .issue { grid-template-columns:54px minmax(0,1fr); gap:14px; align-items:start; }
+ .issue .status { grid-column:2; }
+ .issue-more { grid-column:2; justify-self:start; }
+ .issue-id { display:none; }
+ .product-grid { grid-template-columns:1fr; }
+ .product-card { border-right:0; border-bottom:1px solid light-dark(#d8d8d5,#393939); }
+ .product-card:last-child { border-bottom:0; }
+ .product-card > p:not(.product-subtitle) { min-height:0; }
+ .products-foot { align-items:flex-start; flex-direction:column; }
+ .lab-grid { grid-template-columns:1fr; }
+ .lab-card { min-height:225px; border-right:0; border-bottom:1px solid light-dark(#d8d8d5,#393939); }
+ .lab-card:last-child { border-bottom:0; }
+ .log-row { grid-template-columns:1fr auto; gap:8px 14px; }
+ .log-row p { grid-column:1 / -1; }
+ .manifesto-grid { grid-template-columns:1fr; gap:25px; }
+ .footer-main { align-items:flex-start; flex-direction:column; }
+ .footer-meta { flex-direction:column; gap:8px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; } }
+
+/* Readability pass: increase small UI text while preserving the minimal layout. */
+body { font-size: 17px; line-height: 1.65; }
+.eyebrow { font-size: 13px; }
+.topline-inner { font-size: 12px; }
+.nav-links { font-size: 13px; }
+.button { font-size: 14px; padding: 13px 18px; }
+.theme-toggle { font-size: 12px; }
+.hero-copy { font-size: clamp(18px, 1.8vw, 21px); }
+.hero-note { font-size: 13px; }
+.section-intro { font-size: 17px; }
+.issue h3 { font-size: 19px; }
+.issue p { font-size: 15px; line-height: 1.6; }
+.issue-id, .status { font-size: 12px; }
+.issue-more, .text-action { font-size: 13px; }
+.note-small { font-size: 13px; }
+.lab-top { font-size: 12px; }
+.lab-card p { font-size: 15px; line-height: 1.6; }
+.lab-foot { font-size: 13px; }
+.product-meta, .product-status { font-size: 11px; }
+.product-subtitle { font-size: 14px; }
+.product-card > p:not(.product-subtitle) { font-size: 15px; line-height: 1.6; }
+.product-bottom { font-size: 11px; }
+.products-foot { font-size: 12px; }
+.log-row { font-size: 15px; line-height: 1.6; }
+.log-row time, .log-tag { font-size: 12px; }
+.manifesto-copy { font-size: 16px; line-height: 1.65; }
+.manifesto-copy .mono { font-size: 13px; }
+.footer-links { font-size: 13px; }
+.footer-meta { font-size: 12px; }
+.field span { font-size: 12px; }
+.field input, .field textarea { font-size: 16px; }
+.form-message { font-size: 14px; }
+.mobile-nav-panel a, .mobile-contact-link { font-size: 13px; }
+.saved-submission h3 { font-size: 16px; }
+.saved-submission p { font-size: 14px; line-height: 1.55; }
+.saved-submission small { font-size: 12px; }
+/* Keep every dialog/backdrop above the fixed site header. */
+.modal-backdrop { z-index: 1000; }
+#contact-modal { z-index: 1001; }
+.modal { max-height: calc(100dvh - 40px); overflow-y: auto; }
+@media (max-width:760px) {
+  .topline-inner { font-size: 10px; }
+  .nav-cta { font-size: 12px; }
+  .button { padding: 11px 12px; }
+  .hero-copy { font-size: 18px; }
+  .issue p, .lab-card p, .product-card > p:not(.product-subtitle) { font-size: 15px; }
+  .modal-backdrop { padding: 12px; }
+  .modal { padding: 22px; max-height: calc(100dvh - 24px); }
+  .contact-fields { grid-template-columns: 1fr; gap: 0; }
+}
+
+
+
+/* Motion polish: subtle entrances, hover feedback, smooth anchor navigation, hidden scrollbars. */
+html { scroll-behavior: smooth; }
+/* Keep scrolling fully functional while visually hiding browser scrollbars. */
+html, body, * { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { width: 0; height: 0; display: none; }
+.site-header { transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.wordmark, .nav-links a, .footer-links a { transition: opacity .22s ease, transform .22s ease; }
+.nav-links a:hover, .footer-links a:hover { opacity: .65; }
+.button, .vote, .text-action, .close { transition: color .22s ease, background-color .22s ease, border-color .22s ease, transform .22s ease, box-shadow .22s ease; }
+.button:hover { transform: translateY(-2px); }
+.button:active, .vote:active { transform: translateY(0) scale(.98); }
+.issue, .lab-card, .product-card, .log-row { transition: background-color .25s ease, border-color .25s ease, transform .25s ease; }
+.issue:hover { background: light-dark(rgba(0,0,0,.025),rgba(255,255,255,.035)); }
+.lab-card:hover, .product-card:hover { background-color: light-dark(rgba(0,0,0,.018),rgba(255,255,255,.025)); }
+.product-art { transition: transform .35s ease, background-color .3s ease; }
+.product-card:hover .product-art { transform: translateY(-3px); }
+.hero-grid { animation: grid-arrive 1.1s ease-out both; }
+.hero-content > * { animation: rise-in .7s cubic-bezier(.2,.7,.2,1) both; }
+.hero-content > *:nth-child(2) { animation-delay: .08s; }
+.hero-content > *:nth-child(3) { animation-delay: .16s; }
+.hero-content > *:nth-child(4) { animation-delay: .24s; }
+.reveal-on-scroll { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
+.reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+.modal-backdrop { opacity: 0; transition: opacity .22s ease; }
+.modal-backdrop.open { opacity: 1; animation: backdrop-in .22s ease both; }
+.modal-backdrop.open .modal { animation: modal-in .28s cubic-bezier(.2,.75,.25,1) both; }
+.close:hover { transform: rotate(90deg); }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes grid-arrive { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes backdrop-in { from { background-color: rgba(0,0,0,0); } to { background-color: rgba(0,0,0,.55); } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .reveal-on-scroll { opacity: 1; transform: none; }
+}
+
+/* Header refinement: consistent control sizing and a deliberate two-row phone layout. */
+.site-header { z-index: 100; }
+.nav { gap: 20px; }
+.nav-actions { gap: 10px; flex-shrink: 0; }
+.nav-actions > .button { min-height: 48px; white-space: nowrap; }
+.contact-nav { padding: 0 20px; }
+.nav-cta { padding: 0 20px; }
+.theme-toggle { width: 48px; height: 48px; min-width: 48px; flex: 0 0 48px; }
+.mobile-menu { display: none; }
+@media (max-width: 760px) {
+  body { padding-top: 124px; }
+  html { scroll-padding-top: 140px; }
+  .site-header { padding: 0; }
+  .nav.container { width: calc(100% - 28px); min-height: 0; padding: 10px 0 12px; display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "brand actions" "buttons buttons"; gap: 12px; }
+  .wordmark { grid-area: brand; font-size: 25px; letter-spacing: .16em; }
+  .nav-links { display: none; }
+  .nav-actions { grid-area: actions; display: contents; }
+  .theme-toggle { grid-column: 2; grid-row: 1; width: 42px; height: 42px; min-width: 42px; flex-basis: 42px; justify-self: end; }
+  .mobile-menu { display: inline-flex; grid-column: 3; grid-row: 1; min-height: 42px !important; padding: 0 12px !important; align-items: center; justify-content: center; font-size: 13px; }
+  .contact-nav { grid-area: buttons; grid-row: 2; grid-column: 1; width: 100%; min-height: 46px !important; padding: 0 10px !important; font-size: 13px; }
+  .nav-cta { grid-area: buttons; grid-row: 2; grid-column: 2; width: 100%; min-height: 46px !important; padding: 0 12px !important; font-size: 12px; }
+  .nav-actions { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+  .nav-actions > .theme-toggle { position: absolute; top: 10px; right: 76px; }
+  .nav-actions > .mobile-menu { position: absolute; top: 10px; right: 14px; }
+  .nav-actions > .contact-nav, .nav-actions > .nav-cta { position: static; }
+  .nav-actions { display: contents; }
+  .contact-nav { position: absolute !important; left: 14px; bottom: 10px; width: calc((100% - 36px) / 2); }
+  .nav-cta { position: absolute !important; right: 14px; bottom: 10px; width: calc((100% - 36px) / 2); }
+  .nav.container { padding-bottom: 68px; }
+  .mobile-nav-panel { width: calc(100% - 28px); }
+  .topline-inner { gap: 8px; font-size: 8px; letter-spacing: .04em; }
+  .topline-inner span:last-child { text-align: right; }
+}
+@media (max-width: 380px) {
+  .wordmark { font-size: 22px; }
+  .contact-nav { font-size: 12px; }
+  .nav-cta { font-size: 11px; padding-inline: 7px !important; }
+  .theme-toggle { right: 70px !important; }
+}
+
+/* Final phone-only header: keep the original desktop header untouched. */
+@media (max-width: 760px) {
+  body { padding-top: 78px; }
+  html { scroll-padding-top: 92px; }
+  .nav.container {
+    width: calc(100% - 28px); min-height: 0; padding: 12px 0;
+    display: grid; grid-template-columns: minmax(0,1fr) auto;
+    grid-template-areas: "brand actions"; gap: 0; align-items: center;
+  }
+  .wordmark { grid-area: brand; font-size: 25px; letter-spacing: .16em; }
+  .nav-links { display: none !important; }
+  .nav-actions { grid-area: actions; display: flex !important; align-items: center; gap: 8px; }
+  .nav-actions > .contact-nav, .nav-actions > .nav-cta { display: none !important; }
+  .nav-actions > .theme-toggle { position: static !important; width: 42px; height: 42px; min-width: 42px; flex: 0 0 42px; padding: 0; }
+  .nav-actions > .mobile-menu { position: static !important; display: inline-flex; min-height: 42px !important; padding: 0 12px !important; align-items: center; justify-content: center; font-size: 13px; }
+  .mobile-nav-panel { width: calc(100% - 28px); padding: 8px 0 14px; }
+  .mobile-nav-panel.open { animation: phone-menu-in .24s ease both; }
+  .mobile-nav-panel a, .mobile-contact-link { padding: 13px 0; }
+}
+@keyframes phone-menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Phone-only polish: make header controls the same height and use outlined action tiles in the menu. */
+@media (max-width: 760px) {
+  .nav-actions { gap: 8px; }
+  .nav-actions > .theme-toggle,
+  .nav-actions > .mobile-menu {
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px;
+    box-sizing: border-box;
+    align-self: center;
+  }
+  .nav-actions > .theme-toggle {
+    width: 44px !important;
+    min-width: 44px !important;
+    flex: 0 0 44px !important;
+  }
+  .nav-actions > .mobile-menu {
+    padding: 0 14px !important;
+    line-height: 1;
+  }
+  .mobile-nav-panel {
+    padding: 10px 0 16px;
+  }
+  .mobile-nav-panel a {
+    padding: 12px 2px;
+    border-bottom: 1px solid light-dark(#dededb,#333);
+  }
+  .mobile-nav-panel .mobile-contact-link {
+    display: flex;
+    width: 100%;
+    min-height: 46px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    font-family: var(--site-font-body);
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+  }
+  .mobile-nav-panel .mobile-contact-link::after {
+    content: "↗";
+    font-size: 15px;
+  }
+  .mobile-nav-panel .mobile-contact-link:hover {
+    background: light-dark(#111,#f4f4f2);
+    color: light-dark(#fff,#111);
+  }
+}
+
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="badge">Altit Workflows</div>
-        <h1>Altit</h1>
-        <p>We build highly focused, isolated software solutions that eliminate localized friction points for enterprise professionals. Our pinpoint tools automate micro-workflows, saving valuable engineering and operational hours every day.</p>
-    </div>
+<div id="site-root">
+  <div class="topline"><div class="container topline-inner"><span>ALTIT / INDEPENDENT SOFTWARE STUDIO</span><span>FIELD NOTES — 001 / 2026</span></div></div>
+  <header class="site-header">
+    <nav class="container nav" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="Altit home">ALTIT</a>
+      <div class="nav-links"><a href="#products">Products</a><a href="#issues">Issue tracker</a><a href="#log">Build in public</a></div>
+      <div class="nav-actions"><button class="button contact-nav" type="button" data-open-contact>Contact me</button><button class="button theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☼</span><span class="theme-label">Light mode</span></button><button class="button button-dark nav-cta" data-open-modal>Submit a bottleneck <span aria-hidden="true">↗</span></button><button class="button mobile-menu" id="mobile-menu" type="button" aria-expanded="false" aria-controls="mobile-nav-panel">Menu ☰</button></div>
+    </nav>
+    <div class="container mobile-nav-panel" id="mobile-nav-panel"><a href="#products">Products ↗</a><a href="#issues">Issue tracker ↗</a><a href="#log">Build in public ↗</a><a href="#manifesto">Principles ↗</a><button class="mobile-contact-link" type="button" data-open-contact>Contact me ↗</button><button class="mobile-contact-link" type="button" data-open-modal>Suggest a bottleneck ↗</button></div>
+  </header>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="eyebrow"><span class="eyebrow-mark"></span> Precision operational tools <span class="mono">/ 001</span></div>
+          <h1><span>We alter</span><span>complex workflows.</span></h1>
+          <p class="hero-copy">Highly focused software tools that remove friction from professional work. No extra layers. Just useful solutions to specific problems.</p>
+          <div class="hero-actions"><a class="button button-dark" href="#products">Explore products <span aria-hidden="true">↓</span></a><a class="button" href="#manifesto">Read our principles <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="hero-note mono"><span>OBSERVE → INVESTIGATE → VALIDATE → BUILD</span><span>Small tools. Specific problems. Measurable value.</span></div>
+      </div>
+    </section>
+
+    <section class="section products-section" id="products">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-index eyebrow"><b>01</b> / Products</div>
+          <div><h2>Focused tools.<br>Less busywork.</h2><p class="section-intro">A growing collection of small software products for recurring professional headaches. These are early product directions, not released services yet—join the conversation and help us decide what earns a build.</p></div>
+        </div>
+        <div class="product-grid">
+          <article class="product-card">
+            <div class="product-art product-art-doc" aria-hidden="true"><span class="art-page"><i></i><i></i><i></i><b>PDF</b></span><span class="art-arrow">↗</span><span class="art-grid"></span></div>
+            <div class="product-meta mono"><span>PRODUCT / 001</span><span class="product-status">IN DISCOVERY</span></div>
+            <h3>Structura</h3><p class="product-subtitle">Documents → usable data</p><p>Turn inconsistent PDFs and business documents into structured information with less manual cleanup.</p>
+            <div class="product-bottom"><span class="mono">DOCUMENT WORKFLOWS</span><button class="text-action" type="button" data-product-idea="Structura">Help shape it ↗</button></div>
+          </article>
+          <article class="product-card">
+            <div class="product-art product-art-code" aria-hidden="true"><span class="code-line long"></span><span class="code-line medium"></span><span class="code-line short"></span><span class="code-bracket">{ }</span></div>
+            <div class="product-meta mono"><span>PRODUCT / 002</span><span class="product-status">VALIDATING</span></div>
+            <h3>Commit Guard</h3><p class="product-subtitle">Safer commits, fewer surprises</p><p>A focused preflight for spotting potentially sensitive strings and risky metadata before code is shared.</p>
+            <div class="product-bottom"><span class="mono">DEVELOPER HYGIENE</span><button class="text-action" type="button" data-product-idea="Commit Guard">Help shape it ↗</button></div>
+          </article>
+          <article class="product-card">
+            <div class="product-art product-art-time" aria-hidden="true"><div class="clock-face"><span></span><b>!</b></div><span class="time-line"></span><span class="time-line short"></span></div>
+            <div class="product-meta mono"><span>PRODUCT / 003</span><span class="product-status">IDEA STAGE</span></div>
+            <h3>Expiry Watch</h3><p class="product-subtitle">Know before things expire</p><p>One calm place to track certificate and token expiry dates instead of scattered reminders.</p>
+            <div class="product-bottom"><span class="mono">RELIABILITY UTILITIES</span><button class="text-action" type="button" data-product-idea="Expiry Watch">Help shape it ↗</button></div>
+          </article>
+        </div>
+        <div class="products-foot"><span class="mono">EARLY CONCEPTS / NOT YET AVAILABLE</span><button class="button button-dark" type="button" data-open-modal>Suggest a product <span aria-hidden="true">↗</span></button></div>
+      </div>
+    </section>
+
+    <section class="section" id="issues">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-index eyebrow"><b>02</b> / Public issue tracker</div>
+          <div><h2>Find the friction.</h2><p class="section-intro">We don't build software blindly. We investigate the small, recurring problems people have learned to tolerate. Tell us what slows you down, or vote on a bottleneck worth exploring.</p></div>
+        </div>
+        <div class="issues" id="issue-list">
+          <article class="issue" data-issue="pdf">
+            <button class="vote" aria-label="Vote for document parsing" aria-pressed="false"><span aria-hidden="true">↑</span><strong>42</strong></button>
+            <div><h3>Messy document parsing</h3><p>Turning unformatted client PDFs into structured data without manual cleanup.</p></div>
+            <span class="status">Researching</span><span class="issue-id">ISSUE / 001</span>
+          </article>
+          <article class="issue" data-issue="secrets">
+            <button class="vote" aria-label="Vote for commit metadata audits" aria-pressed="false"><span aria-hidden="true">↑</span><strong>19</strong></button>
+            <div><h3>Public commit hygiene</h3><p>Spotting potentially sensitive strings in commit history before they become a bigger problem.</p></div>
+            <span class="status">Validating</span><span class="issue-id">ISSUE / 002</span>
+          </article>
+          <article class="issue" data-issue="certs">
+            <button class="vote" aria-label="Vote for certificate expiry alerts" aria-pressed="false"><span aria-hidden="true">↑</span><strong>8</strong></button>
+            <div><h3>Certificate expiry tracking</h3><p>Keeping track of certificate and token expiry dates without scattered reminders.</p></div>
+            <span class="status">Captured</span><span class="issue-id">ISSUE / 003</span>
+          </article>
+        </div>
+        <p class="note-small">Illustrative discovery entries for this preview—not verified votes, customer research, or live issue-tracker data. Voting is a local demo interaction.</p>
+      </div>
+    </section>
+
+    <section class="section" id="log">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-index eyebrow"><b>04</b> / Build in public</div>
+          <div><h2>Show the work.</h2><p class="section-intro">A simple record of decisions, experiments, and progress. We aim to share what we're learning—not just what we've shipped.</p></div>
+        </div>
+        <div class="log-list">
+          <div class="log-row"><time datetime="2026-10-22">2026.10.22</time><span class="log-tag">Setup</span><p>Professional email infrastructure connected for company communications.</p></div>
+          <div class="log-row"><time datetime="2026-10-18">2026.10.18</time><span class="log-tag">Infra</span><p>Domain routing and DNS security configuration documented.</p></div>
+          <div class="log-row"><time>IN PROGRESS</time><span class="log-tag">Discovery</span><p>Mapping recurring workflow friction before selecting the first product to validate.</p></div>
+        </div>
+        <p class="note-small">Preview content based on the current planning notes; verify dates and operational details before publishing as a public changelog.</p>
+      </div>
+    </section>
+
+    <section class="section manifesto" id="manifesto">
+      <div class="container manifesto-grid">
+        <div><div class="eyebrow"><span class="eyebrow-mark"></span> The operating principle</div><h2>Alter it.<br>Simplify work.</h2></div>
+        <div class="manifesto-copy"><p>Useful software doesn't need to make a big entrance. It needs to remove a real obstacle, work reliably, and give people time back.</p><p>We start narrow, validate with real people, and build only when the problem is worth solving.</p><span class="mono">LESS FRICTION. MORE USEFUL WORK. / ALTIT</span></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="container">
+    <div class="footer-main"><div class="footer-brand"><span class="wordmark">ALTIT</span><span>Precision operational tools</span></div><div class="footer-links"><a href="#manifesto">Principles</a><a href="mailto:contact@altit.dev">Contact</a><a href="#top">Back to top ↑</a></div></div>
+    <div class="footer-meta"><span>© 2026 ALTIT. ALL RIGHTS RESERVED.</span><span>BUILT WITH INTENTION / ALTIT.DEV</span></div>
+  </div></footer>
+</div>
+<div class="modal-backdrop" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+  <div class="modal">
+    <div class="modal-head"><div><div class="eyebrow">ALTIT / CONTACT</div><h2 id="contact-modal-title">Get in touch.</h2></div><button class="close" aria-label="Close contact form" data-close-contact>×</button></div>
+    <p class="section-intro">Have a question or something you’d like to discuss? Send us a note.</p>
+    <form id="contact-form">
+      <label class="field"><span>Your name</span><input name="name" autocomplete="name" required maxlength="100" placeholder="Name"></label>
+      <label class="field"><span>Email address</span><input type="email" name="email" autocomplete="email" required maxlength="200" placeholder="you@company.com"></label>
+      <label class="field"><span>Message</span><textarea name="message" required maxlength="3000" placeholder="How can we help?"></textarea></label>
+      <button class="button button-dark" type="submit">Prepare email <span aria-hidden="true">↗</span></button>
+      <p class="form-message" id="contact-message" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+<div class="modal-backdrop" id="idea-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-head"><div><div class="eyebrow">Altit / intake</div><h2 id="modal-title">Where's the friction?</h2></div><button class="close" aria-label="Close dialog" data-close-modal>×</button></div>
+    <p class="section-intro">Describe a repetitive task that wastes time. This demo keeps your submission in this preview only; it does not send or store it.</p>
+    <form id="idea-form">
+      <label class="field"><span>Workflow or task</span><input name="title" required maxlength="100" placeholder="e.g. Preparing weekly client reports"></label>
+      <label class="field"><span>What's frustrating about it?</span><textarea name="detail" required maxlength="1000" placeholder="What takes too long, repeats often, or breaks unexpectedly?"></textarea></label>
+      <label class="field"><span>Work email (optional)</span><input type="email" name="email" placeholder="you@company.com"></label>
+      <button class="button button-dark" type="submit">Review submission <span aria-hidden="true">↗</span></button>
+      <p class="form-message" id="form-message" aria-live="polite"></p>
+    </form>
+    <div class="submission-tools"><button class="button" id="export-submissions" type="button">Export saved ideas ↓</button><button class="button" id="view-submissions" type="button" aria-expanded="false">View saved ideas</button></div>
+    <div id="saved-submissions" hidden aria-live="polite"></div>
+  </div>
+</div>
+<script>
+(function () {
+  const modal = document.getElementById('idea-modal');
+  const contactModal = document.getElementById('contact-modal');
+  const contactForm = document.getElementById('contact-form');
+  const contactOpeners = document.querySelectorAll('[data-open-contact]');
+  const contactClosers = document.querySelectorAll('[data-close-contact]');
+  const openers = document.querySelectorAll('[data-open-modal]');
+  const closers = document.querySelectorAll('[data-close-modal]');
+  const form = document.getElementById('idea-form');
+  const message = document.getElementById('form-message');
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle.querySelector('.theme-icon');
+  const themeLabel = themeToggle.querySelector('.theme-label');
+  let darkPressTimer = null;
+  let longPressTriggered = false;
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobilePanel = document.getElementById('mobile-nav-panel');
+  const savedSubmissions = document.getElementById('saved-submissions');
+  const viewSubmissions = document.getElementById('view-submissions');
+  const exportSubmissions = document.getElementById('export-submissions');
+  const productIdeaButtons = document.querySelectorAll('[data-product-idea]');
+
+  function readStore(key, fallback) {
+    try { const value = localStorage.getItem(key); return value === null ? fallback : JSON.parse(value); }
+    catch (_) { return fallback; }
+  }
+  function writeStore(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch (_) { return false; }
+  }
+  function updateThemeButton(theme) {
+    const next = theme === 'light' ? 'dark' : 'light';
+    themeIcon.textContent = theme === 'extreme' ? '✹' : (theme === 'dark' ? '☾' : '☼');
+    themeLabel.textContent = theme === 'extreme' ? 'Extreme dark' : next + ' mode';
+    themeToggle.setAttribute('aria-label', theme === 'extreme' ? 'Extreme dark theme active; click for light theme' : 'Switch to ' + next + ' mode; long-press for extreme dark');
+    themeToggle.setAttribute('aria-pressed', String(theme !== 'light'));
+    themeToggle.title = 'Click to switch theme · Long-press for extreme dark';
+  }
+  function currentTheme() {
+    return document.documentElement.dataset.theme || readStore('altit-theme', null) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function setTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme === 'light' ? 'light' : 'dark';
+    writeStore('altit-theme', theme);
+    updateThemeButton(theme);
+  }
+  function clearLongPress() { if (darkPressTimer) { clearTimeout(darkPressTimer); darkPressTimer = null; } }
+  themeToggle.addEventListener('pointerdown', () => {
+    longPressTriggered = false;
+    darkPressTimer = setTimeout(() => { longPressTriggered = true; setTheme('extreme'); }, 650);
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(eventName => themeToggle.addEventListener(eventName, clearLongPress));
+  themeToggle.addEventListener('contextmenu', event => event.preventDefault());
+  const initialTheme = currentTheme();
+  document.documentElement.dataset.theme = initialTheme;
+  document.documentElement.style.colorScheme = initialTheme;
+  updateThemeButton(initialTheme);
+  themeToggle.addEventListener('click', () => {
+    if (longPressTriggered) { longPressTriggered = false; return; }
+    setTheme(currentTheme() === 'light' ? 'dark' : 'light');
+  });
+
+  mobileMenu.addEventListener('click', () => {
+    const isOpen = mobilePanel.classList.toggle('open');
+    mobileMenu.setAttribute('aria-expanded', String(isOpen));
+    mobileMenu.textContent = isOpen ? 'Close ×' : 'Menu ☰';
+  });
+  mobilePanel.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+    mobilePanel.classList.remove('open');
+    mobileMenu.setAttribute('aria-expanded', 'false');
+    mobileMenu.textContent = 'Menu ☰';
+  }));
+
+  let lastFocus = null;
+  function openModal() {
+    lastFocus = document.activeElement;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    modal.querySelector('input').focus();
+    renderSubmissions();
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  let contactLastFocus = null;
+  function openContactModal() {
+    contactLastFocus = document.activeElement;
+    contactModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    contactModal.querySelector('input').focus();
+  }
+  function closeContactModal() {
+    contactModal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (contactLastFocus) contactLastFocus.focus();
+  }
+  contactOpeners.forEach(el => el.addEventListener('click', () => {
+    if (mobilePanel.classList.contains('open')) {
+      mobilePanel.classList.remove('open');
+      mobileMenu.setAttribute('aria-expanded', 'false');
+      mobileMenu.textContent = 'Menu ☰';
+    }
+    openContactModal();
+  }));
+  contactClosers.forEach(el => el.addEventListener('click', closeContactModal));
+  contactModal.addEventListener('click', e => { if (e.target === contactModal) closeContactModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && contactModal.classList.contains('open')) closeContactModal(); });
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const data = new FormData(contactForm);
+    const name = String(data.get('name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const body = String(data.get('message') || '').trim();
+    const subject = encodeURIComponent('Message from ' + name + ' — Altit website');
+    const content = encodeURIComponent('Name: ' + name + '\\nEmail: ' + email + '\\n\\n' + body);
+    document.getElementById('contact-message').textContent = 'Your email app should open with the message prepared. Review it and send when ready.';
+    window.location.href = 'mailto:contact@altit.dev?subject=' + subject + '&body=' + content;
+  });
+
+  openers.forEach(el => el.addEventListener('click', openModal));
+  productIdeaButtons.forEach(btn => btn.addEventListener('click', () => {
+    openModal();
+    const titleInput = form.elements.namedItem('title');
+    titleInput.value = 'Feedback for ' + btn.dataset.productIdea;
+    form.elements.namedItem('detail').focus();
+  }));
+  closers.forEach(el => el.addEventListener('click', closeModal));
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  const defaults = { pdf: 42, secrets: 19, certs: 8 };
+  const storedVotes = readStore('altit-votes', {});
+  document.querySelectorAll('.issue').forEach(issue => {
+    const id = issue.dataset.issue;
+    const btn = issue.querySelector('.vote');
+    const count = btn.querySelector('strong');
+    const state = storedVotes[id] || { count: defaults[id] || Number(count.textContent), voted: false };
+    count.textContent = String(state.count);
+    btn.setAttribute('aria-pressed', String(!!state.voted));
+    btn.addEventListener('click', () => {
+      const pressed = btn.getAttribute('aria-pressed') === 'true';
+      const nextCount = Math.max(0, Number(count.textContent) + (pressed ? -1 : 1));
+      count.textContent = String(nextCount);
+      btn.setAttribute('aria-pressed', String(!pressed));
+      const allVotes = readStore('altit-votes', {});
+      allVotes[id] = { count: nextCount, voted: !pressed };
+      writeStore('altit-votes', allVotes);
+    });
+  });
+
+  function getSubmissions() { return readStore('altit-submissions', []); }
+  function renderSubmissions() {
+    const items = getSubmissions();
+    savedSubmissions.replaceChildren();
+    savedSubmissions.hidden = !viewSubmissions.getAttribute('aria-expanded') || viewSubmissions.getAttribute('aria-expanded') === 'false';
+    if (!items.length) {
+      const empty = document.createElement('p');
+      empty.className = 'form-message';
+      empty.textContent = 'No ideas saved in this browser yet.';
+      savedSubmissions.appendChild(empty);
+      return;
+    }
+    items.slice().reverse().forEach(item => {
+      const article = document.createElement('article'); article.className = 'saved-submission';
+      const title = document.createElement('h3'); title.textContent = item.title;
+      const detail = document.createElement('p'); detail.textContent = item.detail;
+      const meta = document.createElement('small'); meta.textContent = new Date(item.createdAt).toLocaleString() + (item.email ? ' · ' + item.email : '');
+      article.append(title, detail, meta); savedSubmissions.appendChild(article);
+    });
+  }
+  viewSubmissions.addEventListener('click', () => {
+    const open = viewSubmissions.getAttribute('aria-expanded') !== 'true';
+    viewSubmissions.setAttribute('aria-expanded', String(open));
+    viewSubmissions.textContent = open ? 'Hide saved ideas' : 'View saved ideas';
+    renderSubmissions();
+  });
+  exportSubmissions.addEventListener('click', () => {
+    const items = getSubmissions();
+    const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'altit-ideas.json'; a.click();
+    URL.revokeObjectURL(url);
+    message.textContent = items.length ? 'Saved ideas exported as JSON.' : 'There are no saved ideas to export yet.';
+  });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    const data = new FormData(form);
+    const items = getSubmissions();
+    const item = {
+      title: String(data.get('title') || '').trim(),
+      detail: String(data.get('detail') || '').trim(),
+      email: String(data.get('email') || '').trim(),
+      createdAt: new Date().toISOString()
+    };
+    items.push(item);
+    if (!writeStore('altit-submissions', items)) {
+      message.textContent = 'This browser blocked local storage. Your idea was not saved; please export or copy it before closing.';
+      return;
+    }
+    message.textContent = 'Idea saved in this browser. It has not been sent to Altit or shared with anyone.';
+    form.reset();
+    viewSubmissions.setAttribute('aria-expanded', 'true');
+    viewSubmissions.textContent = 'Hide saved ideas';
+    renderSubmissions();
+  });
+
+
+  // Progressive reveal as sections enter the viewport; content remains visible if unsupported.
+  const motionTargets = document.querySelectorAll('.section-head, .issues, .lab-grid, .product-grid, .log-list, .manifesto-grid, .footer-main');
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    motionTargets.forEach(el => el.classList.add('reveal-on-scroll'));
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+    motionTargets.forEach(el => revealObserver.observe(el));
+  }
+
+})();
+</script>
 </body>
 </html>

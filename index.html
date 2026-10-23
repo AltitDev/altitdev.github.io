@@ -110,9 +110,29 @@ h2 { font-size:clamp(30px,4.3vw,52px); line-height:1.06; letter-spacing:-.05em; 
 .lab-foot { margin-top:auto; display:flex; justify-content:space-between; align-items:center; font-size:11px; position:relative; z-index:1; }
 .dashed { border-style:dashed; }
 
+
+.services-coming-soon { border:1px solid light-dark(#d8d8d5,#393939); margin-top:0; }
+.services-coming-top, .services-coming-bottom { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 18px; color:light-dark(#666,#aaa); font-size:10px; letter-spacing:.06em; }
+.services-coming-top { border-bottom:1px solid light-dark(#d8d8d5,#393939); }
+.services-coming-main { min-height:230px; display:flex; align-items:center; gap:28px; padding:clamp(24px,5vw,58px); position:relative; overflow:hidden; }
+.services-coming-main:after { content:""; position:absolute; inset:0 0 0 auto; width:42%; pointer-events:none; opacity:calc(.65 * var(--site-decoration-opacity)); background-image:radial-gradient(light-dark(#c5c5c1,#444) .8px,transparent .8px); background-size:18px 18px; mask-image:linear-gradient(90deg,transparent,#000); }
+.services-coming-mark { width:72px; height:72px; flex:0 0 72px; display:grid; grid-template-columns:1fr 1fr; gap:5px; transform:rotate(-8deg); }
+.services-coming-mark span { border:1px solid light-dark(#888,#666); background:light-dark(#eee,#202020); }
+.services-coming-mark span:nth-child(2), .services-coming-mark span:nth-child(3) { background:transparent; }
+.services-coming-copy { position:relative; z-index:1; }
+.services-coming-copy h3 { font-size:clamp(25px,3.2vw,38px); line-height:1.1; letter-spacing:-.04em; font-weight:500; margin:0 0 10px; }
+.services-coming-copy p { color:light-dark(#666,#aaa); font-size:14px; margin:0; }
+.services-coming-index { position:absolute; right:18px; bottom:16px; z-index:1; color:light-dark(#777,#888); font-size:9px; }
+.services-coming-bottom { border-top:1px solid light-dark(#d8d8d5,#393939); }
+@media (max-width:600px) { .services-coming-top,.services-coming-bottom { padding:12px; font-size:9px; } .services-coming-main { min-height:200px; gap:18px; padding:25px 18px 42px; align-items:flex-start; flex-direction:column; } .services-coming-mark { width:48px; height:48px; flex-basis:48px; } .services-coming-index { right:12px; bottom:12px; } .services-coming-bottom span:first-child { max-width:65%; } }
+
 .products-section { background:light-dark(#fafaf8,#141414); }
 .product-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid light-dark(#d8d8d5,#393939); }
-.product-card { min-width:0; display:flex; flex-direction:column; padding:18px; border-right:1px solid light-dark(#d8d8d5,#393939); }
+.product-card { min-width:0; display:flex; flex-direction:column; padding:18px; border-right:1px solid light-dark(#d8d8d5,#393939); cursor:pointer; outline-offset:-4px; }
+.product-card:focus-visible { outline:2px solid currentColor; }
+.product-card .product-status { letter-spacing:.025em; }
+.product-card .product-availability { display:block; margin-top:7px; font-size:10px; color:light-dark(#666,#aaa); font-family:"IBM Plex Mono",monospace; }
+.product-card .product-card-hint { font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.04em; }
 .product-card:last-child { border-right:0; }
 .product-art { height:190px; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom:22px; background:light-dark(#f0f0ed,#202020); border:1px solid light-dark(#e1e1dd,#333); }
 .product-art-doc { background-image:linear-gradient(to right,transparent 49.8%,light-dark(#deded9,#333) 50%,transparent 50.2%),radial-gradient(light-dark(#c7c7c1,#444) .7px,transparent .7px); background-size:100% 100%,14px 14px; }
@@ -458,29 +478,17 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { width: 
       <div class="container">
         <div class="section-head">
           <div class="section-index eyebrow"><b>01</b> / Products</div>
-          <div><h2>Focused tools.<br>Less busywork.</h2><p class="section-intro">A growing collection of small software products for recurring professional headaches. These are early product directions, not released services yet—join the conversation and help us decide what earns a build.</p></div>
+          <div><h2>Focused tools.<br>Less busywork.</h2><p class="section-intro">We're preparing a collection of focused software products and services designed to make everyday workflows simpler. Check back soon to discover what's next.</p></div>
         </div>
-        <div class="product-grid">
-          <article class="product-card">
-            <div class="product-art product-art-doc" aria-hidden="true"><span class="art-page"><i></i><i></i><i></i><b>PDF</b></span><span class="art-arrow">↗</span><span class="art-grid"></span></div>
-            <div class="product-meta mono"><span>PRODUCT / 001</span><span class="product-status">IN DISCOVERY</span></div>
-            <h3>Structura</h3><p class="product-subtitle">Documents → usable data</p><p>Turn inconsistent PDFs and business documents into structured information with less manual cleanup.</p>
-            <div class="product-bottom"><span class="mono">DOCUMENT WORKFLOWS</span><button class="text-action" type="button" data-product-idea="Structura">Help shape it ↗</button></div>
-          </article>
-          <article class="product-card">
-            <div class="product-art product-art-code" aria-hidden="true"><span class="code-line long"></span><span class="code-line medium"></span><span class="code-line short"></span><span class="code-bracket">{ }</span></div>
-            <div class="product-meta mono"><span>PRODUCT / 002</span><span class="product-status">VALIDATING</span></div>
-            <h3>Commit Guard</h3><p class="product-subtitle">Safer commits, fewer surprises</p><p>A focused preflight for spotting potentially sensitive strings and risky metadata before code is shared.</p>
-            <div class="product-bottom"><span class="mono">DEVELOPER HYGIENE</span><button class="text-action" type="button" data-product-idea="Commit Guard">Help shape it ↗</button></div>
-          </article>
-          <article class="product-card">
-            <div class="product-art product-art-time" aria-hidden="true"><div class="clock-face"><span></span><b>!</b></div><span class="time-line"></span><span class="time-line short"></span></div>
-            <div class="product-meta mono"><span>PRODUCT / 003</span><span class="product-status">IDEA STAGE</span></div>
-            <h3>Expiry Watch</h3><p class="product-subtitle">Know before things expire</p><p>One calm place to track certificate and token expiry dates instead of scattered reminders.</p>
-            <div class="product-bottom"><span class="mono">RELIABILITY UTILITIES</span><button class="text-action" type="button" data-product-idea="Expiry Watch">Help shape it ↗</button></div>
-          </article>
+        <div class="services-coming-soon" aria-label="Services coming soon">
+          <div class="services-coming-top mono"><span>PRODUCTS &amp; SERVICES</span><span>001 / IN PREPARATION</span></div>
+          <div class="services-coming-main">
+            <div class="services-coming-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <div class="services-coming-copy"><h3>Services coming soon.</h3><p>We're working on what's next. Check back soon.</p></div>
+            <span class="services-coming-index mono" aria-hidden="true">ALTIT / 001</span>
+          </div>
+          <div class="services-coming-bottom mono"><span>FOCUSED SOFTWARE. REAL WORKFLOW PROBLEMS.</span><span>MORE SOON <span aria-hidden="true">↗</span></span></div>
         </div>
-        <div class="products-foot"><span class="mono">EARLY CONCEPTS / NOT YET AVAILABLE</span><button class="button button-dark" type="button" data-open-modal>Suggest a product <span aria-hidden="true">↗</span></button></div>
       </div>
     </section>
 
@@ -692,12 +700,23 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { width: 
   });
 
   openers.forEach(el => el.addEventListener('click', openModal));
-  productIdeaButtons.forEach(btn => btn.addEventListener('click', () => {
+  productIdeaButtons.forEach(btn => btn.addEventListener('click', (event) => {
+    event.stopPropagation();
     openModal();
     const titleInput = form.elements.namedItem('title');
     titleInput.value = 'Feedback for ' + btn.dataset.productIdea;
     form.elements.namedItem('detail').focus();
   }));
+  document.querySelectorAll('.product-card[role="button"]').forEach(card => {
+    card.addEventListener('keydown', event => {
+      if (event.target !== card || (event.key !== 'Enter' && event.key !== ' ')) return;
+      event.preventDefault();
+      openModal();
+      const titleInput = form.elements.namedItem('title');
+      titleInput.value = 'Feedback for ' + card.dataset.productIdea;
+      form.elements.namedItem('detail').focus();
+    });
+  });
   closers.forEach(el => el.addEventListener('click', closeModal));
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
